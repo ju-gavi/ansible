@@ -1,0 +1,29 @@
+- name: Crear usuarios
+  hosts: servidores
+  become: true
+
+  vars:
+    packages:
+      - memcached
+      - mariadb-server
+
+  tasks:
+    - name: Crear usuario carlos
+      ansible.builtin.user:
+        name: carlos
+
+    - name: Crear usuario marta
+      ansible.builtin.user:
+        name: marta
+
+    - name: Verificar espacio swap
+      ansible.builtin.command: free -m
+      register: swap_output
+
+    - name: Instalar redis si hay más de 20MB de swap
+      ansible.builtin.package:
+        name: redis
+        state: present
+      when: >
+        swap_output.stdout_lines[1].split()[1]|int > 20
+

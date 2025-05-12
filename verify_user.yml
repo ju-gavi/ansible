@@ -1,0 +1,24 @@
+---
+- name: Verify the carlos user was created
+  hosts: servidores
+  become: true
+
+  tasks:
+
+    - name: Check if carlos user exists
+      ansible.builtin.shell: getent passwd carlos
+      register: carlos_check
+      failed_when: false
+      changed_when: false
+
+    - name: Carlos was created
+      ansible.builtin.debug:
+        msg: "Carlos was created"
+      when: carlos_check.rc == 0
+
+    - name: Output carlos user status to file
+      ansible.builtin.lineinfile:
+        path: /home/student/verify.txt
+        line: "Carlos was created"
+        create: true
+      when: carlos_check.rc == 0

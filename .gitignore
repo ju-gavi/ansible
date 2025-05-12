@@ -1,0 +1,7 @@
+*.retry
+*.log
+.vagrant/
+*.key
+*.pem
+error.log
+

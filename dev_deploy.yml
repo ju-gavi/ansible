@@ -1,0 +1,52 @@
+- name: Desplegar entorno web
+  hosts: servidores
+  become: true
+
+  handlers:
+    - name: Restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
+
+  tasks:
+
+    - name: Instalar httpd
+      ansible.builtin.package:
+        name: httpd
+        state: present
+
+    - name: Habilitar y arrancar httpd
+      ansible.builtin.service:
+        name: httpd
+        enabled: true
+        state: started
+
+    - name: Desplegar virtual host
+      ansible.builtin.template:
+        src: templates/vhost.conf.j2
+        dest: /etc/httpd/conf.d/vhost.conf
+        mode: '0644'
+      notify: Restart httpd
+
+    - name: Crear directorio del sitio
+      ansible.builtin.file:
+        path: /var/www/vhosts/{{ inventory_hostname }}
+        state: directory
+        mode: '0755'
+
+    - name: Copiar index.html como plantilla
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/vhosts/{{ inventory_hostname }}/index.html
+        mode: '0644'
+
+    - name: Permitir tráfico HTTP/HTTPS
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - http
+        - https
+
