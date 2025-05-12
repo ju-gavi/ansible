@@ -18,18 +18,23 @@ La infraestructura consta de 3 máquinas virtuales:
 
 ## Estructura del proyecto
 
+```
 final_ansible/
-├── ansible.cfg # Configuración de Ansible
-├── inventory # Inventario con grupo 'servidores'
-├── users.yml # Creación de usuarios y lógica condicional
-├── verify_user.yml # Verificación sin modificación
-├── dev_deploy.yml # Despliegue de Apache, vhost y contenido
-├── get_web_content.yml # Test del servicio web con bloque rescue
-├── site.yml # Playbook maestro
+├── ansible.cfg              # Configuración de Ansible
+├── inventory                # Inventario con grupo 'servidores'
+├── users.yml                # Creación de usuarios y lógica condicional
+├── verify_user.yml          # Verificación sin modificación
+├── dev_deploy.yml           # Despliegue de Apache, vhost y contenido
+├── get_web_content.yml      # Test del servicio web con bloque rescue
+├── site.yml                 # Playbook maestro que orquesta todo
 ├── templates/
-│ ├── vhost.conf.j2 # Plantilla de configuración virtual host
-│ └── index.html.j2 # Plantilla dinámica para contenido web
-└── .gitignore # Evita subir claves, logs y archivos sensibles
+│   ├── vhost.conf.j2        # Plantilla del virtual host de Apache
+│   └── index.html.j2        # Plantilla dinámica con el nombre del host
+├── img/
+│   ├── dev_deploy.png       # Captura de la ejecución del playbook
+│   └── curl_vagrant1.png    # Captura de validación del contenido web
+└── .gitignore               # Evita subir claves, logs y archivos sensibles
+```
 
 ## Playbooks 
 
